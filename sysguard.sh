@@ -37,12 +37,22 @@ RAM_AVAILABLE_MB=$((RAM_AVAILABLE / 1024))
 
 # PROCESS INFORMATION
 
-TOP_CPU=$(ps -e -o pid,user,comm,%cpu,%mem --sort=-%cpu | head -n 6)
+PROCESS_DATA=$(ps -e -o pid,user,%cpu,%mem,comm)
 
-TOP_MEMORY=$(ps -e -o pid,user,comm,%cpu,%mem --sort=-%mem | head -n 6)
+TOP_CPU=$(
+    {
+        echo "$PROCESS_DATA" | head -n 1
+        echo "$PROCESS_DATA" | tail -n +2 | sort -k3,3nr | head -n 5
+    }
+)
 
+TOP_MEMORY=$(
+    {
+        echo "$PROCESS_DATA" | head -n 1
+        echo "$PROCESS_DATA" | tail -n +2 | sort -k4,4nr | head -n 5
+    }
+)
 
-# REPORT CONFIGURATION
 
 # REPORT CONFIGURATION
 
@@ -83,6 +93,7 @@ echo "Total Swap: $((SWAP_TOTAL / 1024)) MiB"
 echo "Used Swap: $((SWAP_USED / 1024)) MiB"
 echo "Free Swap: $((SWAP_FREE / 1024)) MiB"
 echo
+
 echo "PROCESS INFORMATION"
 echo "$SEPARATOR"
 echo
@@ -96,5 +107,4 @@ echo "TOP 5 PROCESSES BY MEMORY USAGE"
 echo "$SUB_SEPARATOR"
 echo "$TOP_MEMORY"
 echo
-
 echo "$SEPARATOR"
