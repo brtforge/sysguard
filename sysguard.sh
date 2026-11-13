@@ -35,10 +35,19 @@ RAM_USED_MB=$((RAM_USED / 1024))
 RAM_AVAILABLE_MB=$((RAM_AVAILABLE / 1024))
 
 
+# PROCESS INFORMATION
+
+TOP_CPU=$(ps -e -o pid,user,comm,%cpu,%mem --sort=-%cpu | head -n 6)
+
+TOP_MEMORY=$(ps -e -o pid,user,comm,%cpu,%mem --sort=-%mem | head -n 6)
+
+
+# REPORT CONFIGURATION
+
 # REPORT CONFIGURATION
 
 SEPARATOR="===================================================="
-
+SUB_SEPARATOR="----------------------------------------------------"
 
 # GENERATE SYSTEM REPORT
 
@@ -74,6 +83,18 @@ echo "Total Swap: $((SWAP_TOTAL / 1024)) MiB"
 echo "Used Swap: $((SWAP_USED / 1024)) MiB"
 echo "Free Swap: $((SWAP_FREE / 1024)) MiB"
 echo
+echo "PROCESS INFORMATION"
+echo "$SEPARATOR"
+echo
+
+echo "TOP 5 PROCESSES BY CPU USAGE"
+echo "$SUB_SEPARATOR"
+echo "$TOP_CPU"
+echo
+
+echo "TOP 5 PROCESSES BY MEMORY USAGE"
+echo "$SUB_SEPARATOR"
+echo "$TOP_MEMORY"
+echo
 
 echo "$SEPARATOR"
-
